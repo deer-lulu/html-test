@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <style>
+    div {
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    .red {
+      background-color: brown;
+    }
+
+    .green {
+      background-color: cadetblue;
+    }
+
+    /* ==========================111111111 flex布局，两边固定中间flex：1；========================= */
+    .father {
+      width: 300px;
+      display: flex;
+      /* flex-direction: row;
+        flex-wrap: nowrap; */
+      flex-flow: row nowrap;
+      justify-content: space-between;
+    }
+
+    .child1 {
+      width: 100px;
+    }
+
+    .child2 {
+      flex: 1;
+    }
+
+    .child3 {
+      width: 100px;
+    }
+
+    /* ==========================222222222222 浮动 + overflow布局========================= */
+    .clearfix::after {
+      clear: both;
+      content: '';
+      display: table;
+    }
+
+    .pull-left {
+      float: left;
+    }
+
+    .father-one {
+      width: 300px;
+    }
+
+    .child-one {}
+
+    .child-two {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .child-three {}
+
+    /* ============================3333333333 绝对定位======================= */
+    .father-two {
+      position: relative;
+      width: 300px;
+    }
+
+    .test-one {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+    }
+
+    .test-two {
+      position: absolute;
+      top: 0;
+      left: 100px;
+      right: 100px;
+    }
+
+    .test-three {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+    }
+
+    /* =========================44444444 表单布局========================== */
+    .father-three {
+      width: 500px;
+    }
+
+    .father-three>div {
+      display: table-cell;
+    }
+
+    .three-left {
+      width: 200px;
+      min-width: 200px;
+    }
+
+    .three-right {
+      width: 200px;
+      min-width: 200px;
+    }
+
+    .three-center {
+      margin: 0 200px;
+      width: 100%;
+    }
+
+    /* =========================55555 网格布局========================== */
+    .father-four {
+      display: grid;
+      width: 500px;
+      /* 设置列宽 */
+      grid-template-columns: 160px auto 140px;
+      /* 设置行高 */
+      /* grid-template-rows: 100px; */
+    }
+
+    /* =========================666666 flex布局设置中间宽度100%，两边缩小比例为零========================== */
+    .container {
+      display: flex;
+      width: 600px;
+    }
+
+    .center {
+      width: 100%;
+      order: 2;
+    }
+
+    .left {
+      width: 200px;
+      flex-shrink: 0;
+      order: 1;
+    }
+
+    .right {
+      width: 200px;
+      flex-shrink: 0;
+      order: 3;
+    }
+
+    /* =========================777777 浮动布局 + calc() ========================== */
+    .father-five {
+      width: 500px;
+    }
+
+    .five-left {
+      width: 200px;
+    }
+
+    .five-right {
+      width: 200px;
+    }
+
+    .five-center {
+      width: calc(100% - 400px);
+    }
+  </style>
+</head>
+
+<body>
+  <img style="width: 100px;height: 100px;" src="./lottie (1).json" alt="" />
+  <div class="father">
+    <div class="child1 green">11111</div>
+    <div class="child2 red">222222</div>
+    <div class="child3 green">3333333</div>
+  </div>
+  <div class="clearfix father-one">
+    <div class="pull-left child-one green">6666666666666</div>
+    <div class="child-three pull-left red">7777777</div>
+    <div class="child-two green">888888888888888888</div>
+  </div>
+  <div class="father-two">
+    <div class="test-one green">left</div>
+    <div class="test-two red">center</div>
+    <div class="test-three green">right</div>
+  </div>
+  <div class="father-three">
+    <div class="three-left green">left</div>
+    <div class="three-center red">center</div>
+    <div class="three-right green">right</div>
+  </div>
+  <div class="father-four">
+    <div class="foue-left green">left</div>
+    <div class="four-center red">center</div>
+    <div class="four-right green">right</div>
+  </div>
+  <div class="container">
+    <!-- 优先渲染 -->
+    <div class="center red">
+      center
+    </div>
+    <div class="left green">
+      left
+    </div>
+    <div class="right green">
+      right
+    </div>
+  </div>
+  <div class="father-five clearfix">
+    <div class="pull-left green five-left">left</div>
+    <div class="pull-left red five-center">center</div>
+    <div class="pull-left green five-right">right</div>
+  </div>
+  <details open="open">
+    <summary>标题内容</summary>
+    <div>折叠内容</div>
+  </details>
+
+  <script type="text/javascript">
+    // document.write('<h1>Hello World!</h1>');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<template>
+  <div
+    class="weui-pull-refresh"
+    ref="scrollBox"
+    :style="style"
+    @touchstart="touchStart"
+    @touchmove="touchMove"
+    @touchend="touchEnd"
+  >
+    <div class="weui-pull-refreshing-box">
+      <div v-if="moveState < 2">
+        {{ moveState === 0 ? '下拉即可刷新...' : '释放即可刷新...' }}
+      </div>
+      <div v-else><i class="weui-loading" /> 加载中...</div>
+    </div>
+    <div class="weui-pull-present-box">
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+      <p>1</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'pull-refresh',
+  data() {
+    return {
+      startY: '', //保存touch时的Y坐标
+      moveDistance: 0, //保存向下滑动的距离
+      moveState: 0, //开始滑动到结束后状态的变化 0:下拉即可刷新 1:释放即可刷新 2:加载中
+      duration: 0 //动画持续时间，0就是没有动画
+    };
+  },
+  computed: {
+    style() {
+      return {
+        transition: `${this.duration}ms`,
+        transform: `translate3d(0,${this.moveDistance}px, 0)`
+      };
+    }
+  },
+  methods: {
+    touchStart(e) {
+      this.duration = 0; // 关闭动画
+      this.moveDistance = 0; // 滑动距离归0
+      this.startY = e.targetTouches[0].clientY; // 获得开始Y坐标
+    },
+    touchMove(e) {
+      //判断有没有滚动条，如果有，不能启用。
+      let scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 0) return;
+
+      let move = e.targetTouches[0].clientY - this.startY;
+      if (move > 0) {
+        e.preventDefault();
+        //增加滑动阻力的感觉
+        this.moveDistance = Math.pow(move, 0.8);
+        if (this.moveDistance > 50) {
+          if (this.moveState === 1) return;
+          this.moveState = 1;
+        } else {
+          if (this.moveState === 0) return;
+          this.moveState = 0;
+        }
+      }
+    },
+    touchEnd(e) {
+      this.duration = 300;
+      if (this.moveDistance > 50) {
+        this.moveState = 2;
+        this.moveDistance = 50;
+        setTimeout(() => {
+          this.moveState = 0; // 成功回调
+        }, 2000);
+      } else {
+        this.moveDistance = 0;
+      }
+    }
+  },
+  watch: {
+    moveState(state) {
+      if (state === 0 && this.duration === 300) {
+        this.moveDistance = 0;
+      }
+    }
+  }
+};
+</script>
+<!-- css我就不讲了，你肯定比我厉害 -->
+<style scoped lang="scss">
+.weui-pull-refresh {
+  display: flex;
+  height: calc(100% + 50px);
+  flex-direction: column;
+  margin-top: -50px;
+  .weui-pull-refreshing-box {
+    line-height: 50px;
+    height: 50px;
+    font-size: 14px;
+    color: rgba(69, 90, 100, 0.6);
+    text-align: center;
+  }
+  .weui-pull-present-box {
+    background-color: lighten(#fff, 10%);
+  }
+}
+</style>

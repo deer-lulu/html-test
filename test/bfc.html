@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .father {
+      width: 400px;
+      height: 100px;
+      background-color: blue;
+    }
+
+    .child1 {
+      float: right;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+    }
+
+    .child2 {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: yellow;
+    }
+
+    .child3 {
+      height: 100px;
+      background-color: green;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="child1">
+    </div>
+    <div class="child2">
+    </div>
+    <div class="child3">
+    </div>
+  </div>
+  <script>
+    function test() {
+      var name = 'global';
+      var obj = {
+        name: 'local',
+        foo: function () {
+          this.name = 'foo';
+        }.bind(window)
+      };
+      var bar = new obj.foo();
+      setTimeout(function () {
+        console.log(window.name);
+      }, 0);
+      console.log(bar.name);
+
+      var bar3 = bar2 = bar;
+      bar2.name = 'foo2';
+      console.log(bar3.name);
+    };
+    test()
+  </script>
+</body>
+
+</html>

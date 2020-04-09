@@ -1,0 +1,1118 @@
+<template>
+  <!--下拉刷新容器-->
+  <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll">
+      <!--数据列表-->
+      <ul class="mui-table-view mui-table-view-chevron">
+        <div class="index-wrap">
+          <div class="index-search clearfix">
+            <a
+              class="pull-left search-news iconfont icon-letter"
+              href="./#/centerMsg"
+            >
+              <div class="news-point" v-if="messageCount > 0">
+                {{ messageCount }}
+              </div>
+            </a>
+            <div class="search-box">
+              <a href="./#/noticeSearch">
+                <span class="pull-left search-pl iconfont icon-search"></span>
+                <input
+                  class="pull-left search-text"
+                  type="text"
+                  placeholder="请输入关键字"
+                  disabled
+                />
+              </a>
+            </div>
+            <div class="pull-right search-login">
+              <a
+                class="login-men iconfont icon-men pull-left"
+                href="./#/center"
+                v-if="isLogin"
+              ></a>
+              <a class="login-word pull-left" href="./#/login" v-else>登录</a>
+              <a href="./#/usermanual">
+                <i class="iconfont icon-bangzhu pull-left"></i>
+              </a>
+            </div>
+            <div
+              class="search-sweep pull-right iconfont icon-scancode"
+              @click="scan"
+            ></div>
+          </div>
+          <pic-swiper :swiperList="swiper_list"></pic-swiper>
+          <word-swiper
+            :notice="notice"
+            titlePic="./images/home_image_notice@2x.png"
+            moreUrl="./#/notice"
+          ></word-swiper>
+          <div class="index-menu clearfix">
+            <a
+              class="menu-box"
+              v-on:click="permissionsJudge(item.boolean, item.url)"
+              v-for="(item, index) in menu"
+              :key="index"
+            >
+              <div
+                class="menu-img"
+                :style="{ 'background-image': 'url(' + item.img + ')' }"
+              ></div>
+              {{ item.title }}
+            </a>
+          </div>
+          <div v-for="(item, index) in liveList" :key="index">
+            <div class="train-title border-bottom">
+              <div class="train-line">
+                <span
+                  class="pull-left live-pic"
+                  style="background-image:url('./images/live_class.png')"
+                ></span>
+                {{ item.subject }}
+              </div>
+            </div>
+            <div class="train-newlawer clearfix">
+              <div class="pull-left live-time">直播时间: {{ item.time }}</div>
+              <a class="title-more pull-right clearfix" href="javascript:;">
+                <span class="pull-right train-arrow iconfont icon-right"></span>
+                <span
+                  class="pull-right train-more"
+                  v-if="
+                    item.status === 'Plan' ||
+                      item.status === 'Prapare' ||
+                      item.status === 'Reporting'
+                  "
+                  >暂未开始</span
+                >
+                <span
+                  class="pull-right train-more"
+                  v-else
+                  @click="jumpView(item.id)"
+                >
+                  <span style="font-size:0.36rem;">进入直播</span>
+                  <span class="pull-right train-huo iconfont icon-huo"></span>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="index-picifo">
+            <div
+              class="info-more"
+              style="background-image: url('./images/image_message1@2x.png')"
+            >
+              党建资讯
+            </div>
+            <div
+              class="picimg"
+              style="background-image: url('./images/image_message2@2x.png')"
+            >
+              <a
+                :href="
+                  `#/noticeDetail?id=${party_information[0].id}&type=party_information`
+                "
+                v-if="party_information.length"
+              >
+                <div class="title">{{ party_information[0].title }}</div>
+              </a>
+              <a class="more-link" href="./#/partyInformation">
+                更多
+                <i class="iconfont icon-righttwo"></i>
+              </a>
+            </div>
+          </div>
+          <div class="index-information">
+            <div class="infomation-tit border-bottom-out">
+              <!-- <span class="pull-left tit-icon iconfont icon-news"></span> -->
+              <div class="tit-content">协会资讯</div>
+              <a class="information-more" href="./#/information">
+                <span class="more">更多</span>
+                <span class="arrow-more iconfont icon-righttwo"></span>
+              </a>
+            </div>
+            <scroller lock-y :scrollbar-x="false">
+              <ul
+                class="information-list clearfix"
+                :style="{ width: 3.4 * information.length + 'rem' }"
+              >
+                <li
+                  class="border-bottom-out pull-left"
+                  v-for="(item, index) in information"
+                  :key="index"
+                >
+                  <a
+                    class="information-line"
+                    :href="`#/noticeDetail?id=${item.id}&type=information`"
+                  >
+                    <div
+                      class="imformation-img"
+                      :style="{
+                        'background-image': 'url(' + item.picture + ')'
+                      }"
+                    ></div>
+                    <div class="infomation-content">{{ item.title }}</div>
+                    <!-- <span class="infomation-date">{{item.date}}</span> -->
+                  </a>
+                </li>
+              </ul>
+            </scroller>
+          </div>
+          <a
+            v-if="advertisements.length"
+            class="index-advertisement"
+            :class="{ showadv: showadv }"
+            :style="{
+              'background-image': 'url(' + advertisements[0].img + ')'
+            }"
+            href="javascript:void(0);"
+            @click="clickAd(advertisements[0].url, advertisements[0].id)"
+          >
+            <span class="adv-close iconfont icon-fork" @click="closeadv"></span>
+            <span class="adv-tip">广告</span>
+          </a>
+          <div
+            class="shadow"
+            v-if="cardComture"
+            @click="cardComture = false"
+          ></div>
+          <div class="goodwords" v-if="cardComture">
+            <div
+              class="goodwords-card"
+              style="background-image:url('./images/goodwords.png')"
+            >
+              <div class="words-box" v-html="goodWords.words"></div>
+            </div>
+            <div class="date-box clearfix">
+              <div class="year pull-left">{{ goodWords.date.year }}</div>
+              <div class="center pull-left">{{ goodWords.date.day }}</div>
+              <dir class="right-date pull-left">
+                <div class="weekeng">{{ goodWords.date.monEng }}</div>
+                <div class="month">
+                  {{ goodWords.date.month }}
+                  <span>月</span>
+                </div>
+                <div class="moneng">{{ goodWords.date.weekEng }}.</div>
+                <div class="week">星期{{ goodWords.date.week }}</div>
+              </dir>
+            </div>
+            <div class="goodwords-btns clearfix">
+              <div class="pull-left">
+                <a href="./#/goodwordspage">
+                  <i class="iconfont icon-liebiao"></i>
+                </a>
+              </div>
+              <div
+                class="pull-left"
+                :class="{ collection: cardCollection }"
+                @click="likeGoodWords()"
+              >
+                <i class="iconfont icon-shoucang2"></i>
+              </div>
+              <div class="pull-left" @click="cardComture = false">
+                <i class="iconfont icon-fanhui"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+import { AlertModule } from 'vux';
+import { mapGetters, mapActions } from 'vuex';
+import picSwiper from '@/component/swiper/pic-swiper.vue';
+import wordSwiper from '@/component/swiper/word-swiper.vue';
+import adAPI from '@/api/advertisement';
+import train from '@/api/train';
+import msgApi from '@/api/message';
+import oneSentencePerDayApi from '@/api/oneSentencePerDay';
+import commonFunctions from '@/api/common-functions';
+import { Scroller } from 'vux';
+import Vue from 'vue';
+import { ConfirmPlugin } from 'vux';
+Vue.use(ConfirmPlugin);
+export default {
+  components: {
+    picSwiper,
+    wordSwiper,
+    Scroller
+  },
+  name: 'index',
+  data() {
+    return {
+      noData: false, //判断是否数据全部加载完成 true为全部加载完
+      liveList: [],
+      swiper_list: [],
+      notice: [],
+      cardComture: false,
+      cardCollection: false,
+      menu: [],
+      indexpic: [
+        './images/home_news_one@2x.png',
+        './images/home_news_two@2x.png',
+        './images/home_news_three@2x.png'
+      ],
+      information: [],
+      party_information: [],
+      advertisements: [],
+      showadv: true,
+      isLogin: false,
+      messageCount: 0,
+      timer: null,
+      goodWords: {
+        intactDate: '',
+        words: '我们埋在土里的愿望，谁能把它像流水一样地遗忘。',
+        date: {
+          year: '',
+          month: '',
+          monEng: '',
+          day: '',
+          weekEng: '',
+          week: ''
+        }
+      }
+    };
+  },
+  methods: {
+    ...mapActions([]),
+    load2() {
+      console.log('xiala');
+      setTimeout(() => {
+        this.mui('#pullrefresh')
+          .pullRefresh()
+          .endPulldownToRefresh();
+        // this.setLogin();
+        // this.getSwiper();
+        // this.getInformationList();
+        // this.getNoticeList();
+        // this.getPartyInformationList();
+        // this.queryCommonFunctions();
+        // this.getOneSentencePerDayByCurrentDate();
+        // this.getLiveEventList();
+      }, 2000);
+    },
+    getLiveEventList() {
+      train.getLiveEventList().then(liveList => {
+        if (liveList.data.result) {
+          this.liveList = liveList.data.result;
+        }
+      });
+    },
+    jumpView(id) {
+      if (this.isLogin) {
+        window.location.href = '#/public-online-detail?courseId=' + id;
+      } else {
+        this.$vux.confirm.show({
+          title: '提示',
+          content: '律师、实习人员登录后观看直播课程，可获得学分！',
+          confirmText: '立即登录',
+          cancelText: '直接进入',
+          onCancel() {
+            window.location.href = '#/public-online-detail?courseId=' + id;
+          },
+          onConfirm() {
+            window.location.href = '#/login';
+          }
+        });
+      }
+    },
+    clickAd(url, id) {
+      adAPI.addAdClick({ adId: id });
+      if (url) {
+        this.$vux.confirm.show({
+          title: '提示',
+          content: '您正在离开律兴APP并跳转至第三方网页',
+          // 组件除show外的属性
+          confirmText: '确定',
+          onConfirm() {
+            cordova.InAppBrowser.open(
+              url,
+              '_system',
+              'location=no,toolbar=yes,toolbarposition=bottom,closebuttoncaption=关闭'
+            );
+          }
+        });
+      }
+    },
+    likeGoodWords() {
+      oneSentencePerDayApi
+        .likeOneSentencePerDayByCurrentUser({
+          like: !this.cardCollection,
+          date: this.goodWords.intactDate
+        })
+        .then(res => {
+          if (res.data.code === 1) {
+            this.cardCollection = !this.cardCollection;
+          }
+        });
+    },
+    getOneSentencePerDayByCurrentDate() {
+      if (this.isLogin && this.$cookies.get('showGoodWords') === null) {
+        oneSentencePerDayApi.getOneSentencePerDayByCurrentDate().then(res => {
+          if (res.data.code === 1) {
+            this.setExpiresCookie();
+            this.goodWords.words = res.data.result.properties.content;
+            let date = res.data.result.display.date;
+            this.goodWords.intactDate = date;
+            this.convertDate(date);
+            this.cardComture = true;
+          }
+        });
+      }
+    },
+
+    setExpiresCookie() {
+      var curDate = new Date();
+      //当前时间戳
+      var curTamp = curDate.getTime();
+      //当日凌晨的时间戳,减去一毫秒是为了防止后续得到的时间不会达到00:00:00的状态
+      var curWeeHours = new Date(curDate.toLocaleDateString()).getTime() - 1;
+
+      //当日已经过去的时间（毫秒）
+      var passedTamp = curTamp - curWeeHours;
+
+      //当日剩余时间
+      var leftTamp = 24 * 60 * 60 * 1000 - passedTamp;
+      var leftTime = new Date();
+      leftTime.setTime(leftTamp + curTamp);
+      this.$cookies.set('showGoodWords', true, leftTime.toGMTString());
+    },
+
+    convertDate(date) {
+      var myDate = new Date(date);
+      var year = myDate.getFullYear().toString();
+      var month = (myDate.getMonth() + 1).toString();
+      var monEng = myDate.toDateString().split(' ')[1];
+      var weekEng = myDate.toDateString().split(' ')[0];
+      var day = myDate.getDate();
+      var week = myDate.getDay().toString();
+      var upperCaseNumber = [
+        '零',
+        '一',
+        '二',
+        '三',
+        '四',
+        '五',
+        '六',
+        '七',
+        '八',
+        '九',
+        '十'
+      ];
+      var flag = 0;
+      year = year.split('');
+      month = month.split('');
+      for (var i = 0; i < year.length; i++) {
+        flag = year[i];
+        year[i] = upperCaseNumber[flag];
+      }
+      if (month.length > 1) {
+        month[0] = '十';
+        month[1] = upperCaseNumber[month[1]];
+      } else month[0] = upperCaseNumber[month[0]];
+      if (week === '0') {
+        week = '天';
+      } else {
+        week = upperCaseNumber[week];
+      }
+      this.goodWords.date.year = year.join('');
+      this.goodWords.date.month = month.join('');
+      this.goodWords.date.monEng = monEng;
+      this.goodWords.date.day = day;
+      this.goodWords.date.week = week;
+      this.goodWords.date.weekEng = weekEng;
+    },
+    //查询常用功能
+    queryCommonFunctions() {
+      commonFunctions.queryCommonFunctions().then(res => {
+        if (res.data.code == 1) {
+          this.menu = res.data.result;
+        }
+      });
+    },
+
+    permissionsJudge(boolean, url) {
+      if (!boolean) {
+        AlertModule.show({
+          title: '提示',
+          content: '无法执行当前操作'
+        });
+        return false;
+      } else {
+        location.href = url;
+      }
+    },
+    scan() {
+      this.$router.push({
+        path: 'scan'
+      });
+    },
+    setLogin() {
+      if (this.user) {
+        this.isLogin = true;
+      } else {
+        this.isLogin = false;
+      }
+    },
+    loadAd() {
+      adAPI.getShowAdList().then(res => {
+        let data = res.data;
+        if (data.code === 1) {
+          let result = data.result;
+          let entity = result[0];
+          if (entity) {
+            this.advertisements.push({
+              id: entity.id,
+              img: '/service/rest/tk.File/' + entity.properties.img,
+              url: entity.properties.link
+            });
+          }
+        }
+      });
+    },
+    closeadv(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.showadv = false;
+    },
+    startGetMessageCount() {
+      msgApi.myNotReadCount().then(response => {
+        let data = response.data;
+        let code = data.code;
+        if (code === 1) {
+          this.messageCount = data.result;
+        }
+      });
+    },
+    getSwiper() {
+      let my = this;
+      this.$jsonp(
+        'http://www.gzlawyer.org/plugins/app/getInformationList.jsp',
+        {
+          catalogIds: '9d7d1757c2bf4579845105b3e7709b0d',
+          page: 1,
+          pageSize: 5,
+          hasPicture: 'true'
+        }
+      )
+        .then(function(json) {
+          let swiperList = [];
+          for (var i = 1; i <= 3; i++) {
+            let swiper = {
+              url: 'javascript:void(0);',
+              img: './images/index' + i + '.png?thumb=500x500'
+            };
+            swiperList.push(swiper);
+            // my.swiper_list.push(swiper);
+          }
+          // let daibiaodahui = {
+          //   url: "#/shoppingEmbedded2?name=代表大会&url=http://oa.gzlawyer.org/congress/gzCongress/mobile/sign.jsp",
+          //   img: "./images/daibiaodahui_banner.jpg?thumb=500x500"
+          // };
+          // my.swiper_list.push(daibiaodahui);
+          let xuanchuanpian = {
+            url:
+              '#/shoppingEmbedded2?name=简介视频&url=http://1251268953.vod2.myqcloud.com/43b5a6f1vodtransgzp1251268953/e1c2879f5285890789348544836/v.f40.mp4',
+            img: './images/spjs.jpg?thumb=500x500'
+          };
+          swiperList.push(xuanchuanpian);
+          my.swiper_list = swiperList;
+          // my.swiper_list.push(xuanchuanpian);
+          // json.informations.forEach(item => {
+          //   let swiper = {
+          //     id: item.id,
+          //     title: item.title,
+          //     url: "javascript:;",
+          //     img: "http://www.gzlawyer.org/" + item.picture + "?thumb=500x500"
+          //   };
+          //   my.swiper_list.push(swiper);
+          // });
+        })
+        .catch(function(err) {});
+    },
+    getInformationList() {
+      let informationList = [];
+      let my = this;
+      this.$jsonp(
+        'http://www.gzlawyer.org/plugins/app/getInformationList.jsp',
+        {
+          catalogIds: '9d7d1757c2bf4579845105b3e7709b0d',
+          page: 1,
+          pageSize: 4,
+          hasPicture: 'true'
+        }
+      )
+        .then(function(json) {
+          json.informations.forEach(item => {
+            let info = {
+              id: item.id,
+              url: 'javascript:;',
+              title: item.title,
+              date: item.date,
+              picture:
+                'http://www.gzlawyer.org/' + item.picture + '?thumb=500x500'
+              // picture: item.picture,
+            };
+            my.information.push(info);
+            // my.information = informationList;
+          });
+        })
+        .catch(function(err) {});
+    },
+    getPartyInformationList() {
+      let my = this;
+      this.$jsonp(
+        'http://www.gzlawyer.org/plugins/app/getInformationList.jsp',
+        {
+          catalogIds: '8362e8a83ee34857bc2a1c78f0e4f279',
+          page: 1,
+          pageSize: 2
+        }
+      )
+        .then(function(json) {
+          json.informations.forEach(item => {
+            let info = {
+              id: item.id,
+              url: 'javascript:;',
+              title: item.title,
+              date: item.date
+            };
+            my.party_information.push(info);
+          });
+        })
+        .catch(function(err) {});
+    },
+    getNoticeList() {
+      let my = this;
+      this.$jsonp(
+        'http://www.gzlawyer.org/plugins/app/getInformationList.jsp',
+        {
+          catalogIds: '6e27c6b284164bf28f63be7fc1b987a0',
+          page: 1,
+          pageSize: 3
+        }
+      )
+        .then(function(json) {
+          my.notice = json.informations;
+          json.informations;
+        })
+        .catch(function(err) {});
+    }
+  },
+  watch: {},
+  computed: {
+    ...mapGetters(['user'])
+  },
+  created() {
+    this.setLogin();
+    this.getSwiper();
+    this.getInformationList();
+    this.getNoticeList();
+    this.getPartyInformationList();
+    this.queryCommonFunctions();
+    this.getOneSentencePerDayByCurrentDate();
+  },
+  activated() {
+    this.getLiveEventList();
+    this.setLogin();
+    this.queryCommonFunctions();
+    let elem = document.querySelector('#vux_view_box_body');
+    setTimeout(() => {
+      elem.style.paddingBottom = '44px';
+    }, 10);
+  },
+  beforeMount() {
+    this.getLiveEventList();
+  },
+  mounted() {
+    let mui = this.mui;
+    mui.init({
+      pullRefresh: {
+        container: '#pullrefresh', //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+        down: {
+          height: 50, //可选,默认50.触发下拉刷新拖动距离,
+          auto: false, //可选,默认false.首次加载自动下拉刷新一次
+          contentdown: '下拉可以刷新', //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+          contentover: '释放立即刷新', //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+          contentrefresh: '正在刷新...', //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+          callback: this.load2 //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+        }
+      }
+    });
+    document.addEventListener(
+      'backbutton',
+      function() {
+        if (document.location.hash === '#/') {
+          navigator.Backbutton.goHome(
+            function() {
+              console.log('go home success');
+            },
+            function() {
+              console.log('go home fail');
+            }
+          );
+        } else {
+          if (!window.goHistory || window.goHistory === false) {
+            window.goHistory = true;
+            history.back();
+            setTimeout(function() {
+              window.goHistory = false;
+            }, 300);
+          }
+        }
+      },
+      false
+    );
+    this.loadAd();
+    this.timer = setInterval(this.startGetMessageCount(), 1000 * 60 * 5);
+    let elem = document.querySelector('#vux_view_box_body');
+    setTimeout(() => {
+      elem.style.paddingBottom = '44px';
+    }, 10);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  }
+};
+</script>
+
+<style scoped lang="scss" rel="stylesheet/scss">
+/* prettier-ignore */
+@import "../../assets/scss/common";
+.index-wrap {
+  background-color: $white;
+  // padding-top: 20px;
+  // padding-top: constant(safe-area-inset-top);
+  // padding-top: env(safe-area-inset-top);
+
+  .index-search {
+    position: relative;
+    width: 100%;
+    height: 0.88rem;
+    line-height: 0.88rem;
+    color: $gray-dark;
+    font-weight: normal;
+    background-color: $white;
+    .search-news {
+      position: relative;
+      display: block;
+      color: $gray-dark;
+      padding-left: 0.45rem;
+      font-size: 0.5rem;
+    }
+    .news-point {
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: translate(50%, 0.06rem);
+      height: 0.36rem;
+      min-width: 0.36rem;
+      padding: 0 0.05rem;
+      line-height: 0.36rem;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 0.2rem;
+      color: $white;
+      background-color: #f54a39;
+    }
+    .search-login {
+      width: 1.6rem;
+      padding: 0 0.2rem;
+      text-align: center;
+    }
+    .login-men {
+      display: block;
+      color: $gray-dark;
+      font-size: 0.5rem;
+    }
+    .login-word {
+      display: block;
+      color: $gray-dark;
+      font-size: 0.3rem;
+    }
+    .iconfont.icon-bangzhu {
+      margin-left: 0.2rem;
+      font-size: 0.35rem;
+      color: $gray-dark;
+    }
+    .search-box {
+      position: absolute;
+      left: 42%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 3.7rem;
+      height: 0.56rem;
+      line-height: 0.56rem;
+      background-color: #fcfcfc;
+      border: 1px solid #f0f0f0;
+      border-radius: 0.28rem;
+    }
+    .search-text {
+      width: 100%;
+      height: 0.56rem;
+      padding-left: 0.59rem;
+      box-sizing: border-box;
+      font-size: 0.24rem;
+      color: $white;
+      line-height: 0.4rem;
+      border: none;
+      background-color: transparent;
+      &::-webkit-input-placeholder {
+        /* placeholder颜色  */
+        color: $gray-lighter;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    .search-pl {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0.59rem;
+      text-align: center;
+      font-size: 0.36rem;
+      color: $gray-lighter;
+    }
+    .search-sweep {
+      width: 0.59rem;
+      padding-left: 0.1rem;
+      font-size: 0.42rem;
+    }
+  }
+  .index-menu {
+    width: 100%;
+    padding: 0 0.24rem;
+    margin-bottom: 0.33rem;
+    // margin-bottom: 0.1rem;
+    box-sizing: border-box;
+    background-color: $white;
+    .menu-box {
+      float: left;
+      width: 25%;
+      height: 1.8rem;
+      padding-top: 0.25rem;
+      font-size: 0.26rem;
+      line-height: 0.36rem;
+      text-align: center;
+      color: $gray-light;
+    }
+    .menu-img {
+      width: 100%;
+      height: 1rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 0.9rem 0.9rem;
+    }
+  }
+  .train-title {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 0 0.19rem 0;
+    box-sizing: border-box;
+    background-color: $white;
+    &.bottom-box {
+      margin-bottom: 0.1rem;
+    }
+    .train-line {
+      position: relative;
+      height: 0.42rem;
+      padding-left: 0.35rem;
+      line-height: 0.42rem;
+      font-weight: bold;
+      font-size: 0.36rem;
+      color: $gray-dark;
+      box-sizing: border-box;
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0.1rem;
+        height: 100%;
+        content: '';
+        background-color: $brand;
+      }
+    }
+    .train-more {
+      font-size: 0.24rem;
+      font-weight: normal;
+      color: $brand;
+    }
+    .train-arrow {
+      padding-left: 0.2rem;
+      padding-right: 0.24rem;
+      font-weight: normal;
+      font-size: 0.32rem;
+      background-image: linear-gradient(-4deg, #3a8bff, #569fff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .title-more {
+      display: block;
+      padding-left: 0.15rem;
+    }
+    .live-pic {
+      width: 0.45rem;
+      height: 100%;
+      margin-left: 0.03rem;
+      margin-right: 0.2rem;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+  .train-newlawer {
+    display: block;
+    width: 100%;
+    padding-left: 0.4rem;
+    margin-bottom: 0.1rem;
+    background-color: $white;
+    .train-more {
+      font-size: 0.24rem;
+      font-weight: normal;
+      color: $brand;
+      line-height: 1.03rem;
+    }
+    .train-arrow {
+      padding-left: 0.2rem;
+      padding-right: 0.24rem;
+      font-weight: normal;
+      font-size: 0.32rem;
+      background-image: linear-gradient(-4deg, #3a8bff, #569fff);
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 1.03rem;
+    }
+    .train-huo {
+      padding-left: 0.2rem;
+      padding-right: 0.15rem;
+      font-weight: normal;
+      font-size: 0.32rem;
+      color: $brand;
+      line-height: 1.03rem;
+    }
+    .live-time {
+      font-size: 0.28rem;
+      color: $gray-dark;
+      line-height: 1.03rem;
+    }
+  }
+  .index-picifo {
+    position: relative;
+    width: 100%;
+    padding: 0 0.24rem;
+    margin-bottom: 0.62rem;
+    box-sizing: border-box;
+    background-color: #fff;
+    .info-more {
+      position: absolute;
+      width: 1.38rem;
+      height: 0.63rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      text-align: center;
+      display: block;
+      font-size: 0.24rem;
+      line-height: 0.5rem;
+      color: $white;
+    }
+    .more-link {
+      position: absolute;
+      bottom: 0.02rem;
+      right: 0.24rem;
+      height: 0.4rem;
+      padding-left: 0.24rem;
+      font-size: 0.26rem;
+      line-height: 0.4rem;
+      color: $white;
+      background-color: #fca852;
+      border-top-left-radius: 0.2rem;
+      border-bottom-left-radius: 0.2rem;
+      opacity: 0.8;
+      .icon-righttwo {
+        font-size: 0.24rem;
+        line-height: 0.4rem;
+        display: inline-block;
+        margin-left: 0.1rem;
+        margin-right: 0.05rem;
+      }
+    }
+    .picimg {
+      width: 100%;
+      height: 2rem;
+      padding-top: 0.63rem;
+      padding-left: 0.65rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      a {
+        display: block;
+      }
+      .title {
+        width: 3.5rem;
+        font-size: 0.34rem;
+        line-height: 0.56rem;
+        font-weight: 700;
+        color: $gray-dark;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-align: center;
+      }
+    }
+  }
+  .index-information {
+    width: 100%;
+    padding: 0 0.24rem;
+    margin-bottom: 0.1rem;
+    box-sizing: border-box;
+    background-color: $white;
+    .infomation-tit {
+      width: 100%;
+      line-height: 0.86rem;
+      font-size: 0.38rem;
+      color: $gray-dark;
+      font-weight: bold;
+      box-sizing: border-box;
+      &.type2 {
+        color: #ffaa3f;
+      }
+    }
+    .information-list {
+      padding-top: 0.15rem;
+      padding-left: 0.1rem;
+      // margin-bottom: 20px;
+      .border-bottom-out {
+        display: inline-block;
+        margin-right: 0.2rem;
+        border-radius: 4px;
+        box-shadow: 0 0 10px 1px #cbdcf6;
+        overflow: hidden;
+        .information-line {
+          position: relative;
+          display: block;
+          width: 3.1rem;
+          height: 3.6rem;
+          font-size: 0.32rem;
+          color: $gray-dark;
+          overflow: hidden;
+          .imformation-img {
+            width: 100%;
+            height: 2.3rem;
+            margin-bottom: 0.2rem;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          }
+          .infomation-content {
+            font-size: 0.28rem;
+            line-height: 0.36rem;
+            padding: 0 0.26rem;
+            overflow: hidden;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+    // .tit-icon {
+    //   font-size: 0.46rem;
+    // }
+    // .tit-content {
+    //   padding-left: 0.66rem;
+    // }
+    .infomation-index {
+      width: 0.66rem;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-size: 0.36rem 0.36rem;
+      background-position: 0.08rem 0.18rem;
+    }
+    .infomation-date {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      min-width: 30%;
+      padding-bottom: 0.15rem;
+      font-size: 0.24rem;
+      text-align: right;
+      color: $gray-lighter;
+      box-shadow: #ffffff99 -0.2rem 0 0.1rem 0.1rem;
+      background-color: $white;
+    }
+    .information-more {
+      position: absolute;
+      right: 0.4rem;
+      top: 0;
+      display: block;
+      height: 0.86rem;
+      line-height: 0.86rem;
+      font-size: 0.28rem;
+      font-weight: 500;
+      color: $gray-lighter;
+      text-align: center;
+    }
+    .arrow-more {
+      display: inline-block;
+      // padding-left: 0.2rem;
+      font-size: 0.25rem;
+      vertical-align: middle;
+    }
+    .more {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  .index-advertisement {
+    position: relative;
+    display: none;
+    width: 100%;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    &.showadv {
+      display: block;
+    }
+    .adv-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.07rem 0.24rem;
+      font-size: 0.24rem;
+      color: #b6b6b6;
+    }
+    .adv-tip {
+      position: absolute;
+      top: 0.15rem;
+      left: 0.15rem;
+      color: $white;
+      height: 0.28rem;
+      padding: 0 0.16rem;
+      line-height: 0.28rem;
+      font-size: 0.2rem;
+      border-radius: 0.04rem;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .shadow {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background-color: rgba($color: $black, $alpha: 0.4);
+    z-index: 1;
+  }
+}
+</style>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .father {
+      width: 200px;
+      height: 400px;
+      display: flex;
+      flex-flow: column wrap;
+    }
+
+    .child {
+      width: 100px;
+      height: 200px;
+      box-sizing: border-box;
+      background-color: antiquewhite;
+    }
+
+    .child:nth-child(2n) {
+      background-color: aqua;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <div class="father">
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child" style="height: 30px;"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+  </div> -->
+  
+  <script>
+    // document.onkeydown = keyDown;
+    // document.onkeypress = keypress;
+    // document.onkeyup = keyup;
+
+    // function keyDown() {
+    //   console.log(111)
+    // }
+
+    // function keypress() {
+    //   console.log(222)
+    // }
+
+    // function keyup() {
+    //   console.log(333)
+    // }
+    function func() {
+      console.log(111,this)
+      return () => {
+        console.log(222,this)
+      }
+    };
+//     func()
+      var a = func();
+      console.log(a())
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>css-loading动画</title>
+  <style>
+    html,body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .loading-outer {
+      width: 100%;
+      height: calc(100% - 25px);
+      overflow-y: scroll;
+    }
+    .loading-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      width: 100%;
+      height: auto;
+      padding-top: 30px;
+    }
+    .loading-inner .loading-iframe {
+      width: 300px;
+      height: 300px;
+      margin-bottom: 30px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .tip {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      color: skyblue;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-outer">
+    <div class="loading-inner">
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=floating-bars" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=circular" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=floating-circles" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=whirlpool" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=gears" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners/2">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=atom" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=snake-shadowed" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners/4">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=balls-dance" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners/4">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=dance" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/spinners/6">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=rain-waves" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=facebook" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=fountain" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=spinning-squares-wave" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/2">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=dna" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=squares-dance" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=construction" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=blurry-bars" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=pendulum" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/4">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=jumping-snake" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/6">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=billiard" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/6">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=block-composition" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/3d-loaders">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=origami" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/animated-text">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=spinning-text" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/animated-text">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=in-turn-fading-text" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/animated-text">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=text-geometry" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=chemistry" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=pyramid" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=battery-charge" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous/2">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=rhombus" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=infinity" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/miscellaneous/3">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=poker" frameborder="0"></iframe>
+      </div>
+      <div class="loading-iframe" data-url="https://icons8.com/cssload/en/horizontal-bars/5">
+        <iframe src="https://icons8.com/cssload/previews.php?preloader=water-wave" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+  <span class="tip">注：颜色、图案大小、速度可配置</span>
+  <script>
+    window.onload = function() {
+      let boxes = document.querySelectorAll('.loading-iframe');
+      for(let i = 0; i < boxes.length - 1;i++) {
+        boxes[i].addEventListener('click', function(e) {
+          window.open(e.target.dataset.url)
+        })
+      }
+    }
+  </script>
+</body>
+</html>

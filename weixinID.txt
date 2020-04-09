@@ -1,0 +1,22 @@
+徐璐：wx1753fb3e72b73f54  周怡：wx0ae17f55d87294fb
+
+shift+alt+F：代码格式化。ctrl+shift+F：全局搜索。
+
+动态建模  sspadmin  ssp@2019
+
+全国律协二期  086  sfb086
+
+后端律协管理系统  administrator  qglx2017    小石：shr@2019
+
+ [params]="{showDisplayer:true}"
+
+全国诚信平台 pc http://credit.acla.org.cn/
+司法部行政审批  http://new.oa.acla.org.cn/ala#/
+行政审批平台  http://new.oa.acla.org.cn/approval#/home
+外国所  http://new.oa.acla.org.cn/foreign#/lawyerInfo
+两公  http://new.oa.acla.org.cn/central#/lawyerInfo
+
+chart.area().position('year*value').shape('smooth');
+  chart.line().position('year*value').size(2).shape('smooth');
+
+$('.class').addClass('active').siblings().removeClass('active')
