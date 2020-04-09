@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>放大缩小</title>
+  <style>
+    @keyframes scaleDraw {
+
+      /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+      0% {
+        transform: scale(1);
+        /*开始为原始大小*/
+      }
+
+      25% {
+        transform: scale(1.1);
+        /*放大1.1倍*/
+      }
+
+      50% {
+        transform: scale(1);
+      }
+
+      75% {
+        transform: scale(1.1);
+      }
+    }
+
+    .ballon {
+      width: 200px;
+      height: 200px;
+      background-image: url("../image/1.png");
+      background-size: 200px 200px;
+      -webkit-animation-name: scaleDraw;
+      /*关键帧名称*/
+      -webkit-animation-timing-function: ease-in-out;
+      /*动画的速度曲线*/
+      -webkit-animation-iteration-count: infinite;
+      /*动画播放的次数*/
+      -webkit-animation-duration: 5s;
+      /*动画所花费的时间*/
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ballon"></div>
+</body>
+
+</html>

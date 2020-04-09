@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>倒计时</title>
+    <style>
+      body {
+        font-size: 80px;
+        text-shadow: 5px 1px 6px rgb(51, 99, 255);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="d"></div>
+    <div id="h"></div>
+    <div id="m"></div>
+    <div id="s"></div>
+    <script type="text/javascript">
+      var d = document.getElementById('d');
+      var h = document.getElementById('h');
+      var m = document.getElementById('m');
+      var s = document.getElementById('s');
+
+      getTime();
+      setInterval(getTime, 1000);
+
+      function getTime() {
+        //获取当前的日期时间
+        var date = new Date();
+        //获取某个固定时刻的时间
+        var oldTime = new Date('2019-07-1 00:00:00');
+        //两个事件相减除以1000就是以秒为单位计算取整
+        var now = parseInt((oldTime - date) / 1000);
+        //now/3600就是小时
+        var day = parseInt(now / 3600) / 24;
+        day = Math.ceil(day);
+        d.innerHTML = addZero(day);
+
+        var hour = parseInt(now / 3600) % 24;
+        h.innerHTML = addZero(hour);
+
+        var minutes = parseInt(now / 60) % 60;
+        m.innerHTML = addZero(minutes);
+
+        var seconds = parseInt(now % 60);
+        s.innerHTML = addZero(seconds);
+
+        function addZero(n) {
+          return n >= 10 ? n : '0' + n;
+        }
+        console.log(now, day, hour, minutes, seconds);
+      }
+    </script>
+  </body>
+</html>

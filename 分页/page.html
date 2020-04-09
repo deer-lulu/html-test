@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>分页</title>
+  <style>
+    .page-main,
+    .block-main{
+      width: 100%;
+      height: auto;
+    }
+    .page-box,
+    .block-box{
+      width: 100%;
+      height: auto;
+    }
+    .block-content,
+    .block-reduce,
+    .block-add{
+      float: left;
+      list-style: none;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      font-size: 24px;
+      line-height: 30px;
+      border: 1px solid #eee;
+      cursor: pointer;
+    }
+    .active{
+      border: 1px solid greenyellow;
+    }
+
+  </style>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      var mainList = [
+        {title:'标题1111'},
+        {title:'标题22222'},
+        {title:'标题333'},
+        {title:'标题44444'},
+        {title:'标题5555'},
+        {title:'标题666'},
+        {title:'标题7777'},
+        {title:'标题8888'},
+        {title:'标题9999'},
+        {title:'标题10'},
+        {title:'标题11'},
+        {title:'标题12'},
+        {title:'标题13'},
+        {title:'标题14'},
+        {title:'标题15'},
+        {title:'标题16'},
+        {title:'标题17'},
+        {title:'标题18'},
+        {title:'标题19'},
+        {title:'标题20'},
+        {title:'标题21'},
+        {title:'标题22'},
+        {title:'标题23'},
+        {title:'标题24'}
+      ]
+      
+      function pageNum(){
+        let str = ''
+        var num = parseInt(mainList.length/6)
+        for(i = 1; i< num +1 ; i++){
+          let item = '<li class="block-content">'+i+'</li>'
+          str += item
+        }
+        str = '<li class="block-reduce">-</li>' + str + '<li class="block-add">+</li>'
+        $('.block-box').html(str)
+        // console.log(str)
+      }
+      pageNum();
+
+      var rank = 1 
+
+      function changePage(rank){
+        list = mainList.slice((rank-1)*6,rank*6)
+        changeList(list)
+        $('.block-content').siblings().removeClass('active');
+        $('.block-content').eq(rank-1).addClass('active');
+      };
+
+      $('.block-content').click(function(){
+        rank = $(this).text()
+        console.log(rank)
+        changePage(rank)
+      })
+      
+      $('.block-reduce').click(function(){
+        if(rank > 1){
+          rank --
+          changePage(rank)
+        }
+        console.log(rank)
+      });
+
+      $('.block-add').click(function(){
+        if(rank < 4){
+          rank ++
+          changePage(rank)
+        }
+        console.log(rank)
+      });
+
+
+      var list = [
+        {title:'标题1111'},
+        {title:'标题22222'},
+        {title:'标题333'},
+        {title:'标题44444'},
+        {title:'标题5555'},
+        {title:'标题666'}
+      ]
+
+      function changeList(arr){
+        let str = '';
+        for(i = 0; i < arr.length; i++){
+          let item = '<li style="font-size:26px;list-style:none;" >'+arr[i].title+'</li>'
+          str += item
+        }
+        // console.log(str)
+        $('.page-box').html(str)
+      }
+      changeList(list);
+
+      $('.block-content').eq(0).addClass('active');
+
+
+
+    });
+  </script>
+</head>
+
+<body>
+  <div class="page-main">
+    <ul class="page-box">
+    </ul>
+  </div>
+  <div class="block-main">
+    <ul class="block-box">
+      
+    </ul>
+  </div>
+
+</body>
+
+</html>

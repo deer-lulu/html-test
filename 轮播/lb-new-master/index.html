@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>这是一个轮播图</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    html, body {
+        width: 100%;
+        height: 100%;
+    }
+    .body {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        margin: 0 auto;
+        background: red;
+        overflow: hidden;
+    }
+    .body div {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: 200px;
+        font-size: 30px;
+        color: #fff;
+        background: black;
+        opacity: 1;
+    }
+    .body div.anm, .body div.active {
+        transition: left .5s linear;
+    }
+    .body div:nth-child(1) {
+        background: red;
+    }
+    .body div:nth-child(2) {
+        background: green;
+    }
+    .body div:nth-child(3) {
+        background: blue;
+    }
+    .body div:nth-child(4) {
+        background: yellow;
+    }
+    .body div.active {
+        left: 0;
+        z-index: 888;
+        opacity: 1;
+    }
+    .body div.after {
+        left: 100%;
+        z-index: 777;
+    }
+    .body div.before {
+        left: -100%;
+        z-index: 777;
+    }
+</style>
+<body>
+    <div class="body">
+        <div class="active">1</div>
+        <div class="">2</div>
+        <div class="">3</div>
+        <div class="">4</div>
+    </div>
+    <script>
+        let ddm = document.querySelectorAll('.body div');
+        window.onload = () => {
+            let len = ddm.length
+            ddm[len - 1].setAttribute('class', 'before');
+            let index = 0;
+            let nx = 0;
+            let bx = 0;
+            let next = () => {
+                index += 1
+                nx = index + 1;
+                if (index > len - 1) {
+                    index = 0;
+                    nx = index + 1;
+                }
+                bx = index - 1;
+                if (index >= len -1) {
+                    nx = 0;
+                }
+                if (index <= 0) {
+                    bx = len - 1;
+                }
+            }
+            let back = () => {
+                index -= 1;
+                if (index < 0) {
+                    index = len - 1;
+                }
+                nx = index - 1;
+                bx = index + 1;
+                if (index <= 0) {
+                    nx = len - 1;
+                }
+                if (index >= len - 1) {
+                    bx = 0;
+                }
+            }
+            let right = () => {
+                for (let i = 0; i < len; i++) {
+                    ddm[i].setAttribute('class', '');
+                }
+                ddm[index].setAttribute('class', 'active');
+                ddm[nx].setAttribute('class', 'after');
+                ddm[bx].setAttribute('class', 'before anm');
+            }
+            let left = () => {
+                for (let i = 0; i < len; i++) {
+                    ddm[i].setAttribute('class', '');
+                }
+                ddm[index].setAttribute('class', 'active');
+                ddm[nx].setAttribute('class', 'before');
+                ddm[bx].setAttribute('class', 'after anm');
+            }
+            let click = (e) => {
+                let dom = document.querySelector('body');
+                let width = dom.clientWidth/2;
+                let le = e.clientX;
+                if (le > width) {
+                    next();
+                    right();
+                } else {
+                    back();
+                    left();
+                }
+                console.log(index);
+                console.log(bx + '上一个');
+            }
+            document.querySelector('body').addEventListener('click', click);
+        }
+        var _script = document.createElement('script');
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(_script);
+        _script.src = 'http://12348.justice.gov.cn/service/rest/orgstruct.Map/collection/mapgroupdata?jsonp=jsonp';
+        var jsonp = function (data) {
+            console.log(data);
+        }
+    </script>
+</body>
+</html>

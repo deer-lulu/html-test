@@ -1,0 +1,141 @@
+@import "variables";
+@import "mixins";
+
+.vote-counting {
+  padding: 40px 0;
+  width: 100%;
+  height: 100%;
+
+  .content {
+    min-width: 1200px;
+    padding: 0 30px 70px;
+    height: auto;
+    min-height: 700px;
+    background-color: $white;
+    border-radius: $border-radius;
+
+    .back-wrap {
+      padding: 20px 0;
+      width: 100%;
+      height: auto;
+      color: $brand;
+
+      a {
+        font-size: 16px;
+        color: $brand;
+      }
+    }
+
+    .h2 {
+      text-align: center;
+    }
+
+    .bit {
+      color: red;
+    }
+  }
+
+  .chart-wrap {
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    border: 1px solid $input-color;
+    overflow: hidden;
+
+    .chart-gridding {
+      position: absolute;
+      left: 100px;
+      right: 40px;
+      top: 0;
+      bottom: 20px;
+
+      // background-color: #ccc;
+      .line {
+        position: absolute;
+        width: 1px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #ccc;
+      }
+      .num {
+        position: absolute;
+        bottom: -20px;
+        left: -6px;
+      }
+    }
+
+    .chart-content {
+      position: relative;
+      width: 100%;
+      height: auto;
+      z-index: 99;
+    }
+
+    .chart-item {
+      width: 100%;
+      height: auto;
+
+      .label {
+        width: 100px;
+        text-align: right;
+      }
+
+      .histogram {
+        position: relative;
+        padding: 5px 0;
+        width: calc(100% - 140px);
+
+        .inner {
+          height: 8px;
+          background-color: $brand;
+        }
+        .poll {
+          position: absolute;
+          padding: 0 3px;
+          top: 0;
+          bottom: 0;
+          background-color: rgb(249, 239, 173);
+        }
+      }
+    }
+  }
+
+  .count-table {
+    width: 100%;
+    height: auto;
+
+    .count-ct {
+      position: relative;
+      margin-left: -1px;
+      margin-top: -1px;
+      float: left;
+      width: 10%;
+      height: 260px;
+      font-size: 34px;
+      text-align: center;
+      border: 1px solid $input-color;
+      background-color: rgb(230, 242, 230);
+      overflow: hidden;
+      .count-poll {
+        display: block;
+        border-bottom: 1px solid $input-color;
+      }
+
+      .number {
+        display: block;
+      }
+
+      .name {
+        display: inline-block;
+        width: 70px;
+        padding: 10px;
+        height: auto;
+        line-height: 1.1;
+        text-align: center;
+      }
+    }
+  }
+}

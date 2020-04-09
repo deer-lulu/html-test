@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="vote-counting.scss">
+<div class="vote-counting">
+  <div class="container content">
+    <div class="back-wrap">
+      <i class="iconfont icon-arrow-left"></i>
+      <a href="javascript:history.back(-1);">返回</a>
+    </div>
+    <h2 class="h2">理事票选名单</h2>
+    <h3 class="h3"><span class="bit mr">*</span>请当前组别票选结果</h3>
+    <div class="chart-wrap">
+      <div class="chart-gridding">
+      </div>
+      <div class="chart-content">
+        <!-- 挖个坑 -->
+      </div>
+    </div>
+    <h3 class="h3 text-center">说明：本组共33人投票，有效投票共31票，无效投票共33票</h3>
+    <div class="count-table clearfix">
+      <!-- 挖个坑 -->
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var main = require('main')
+  var $, jQuery;
+  $ = jQuery = require('jquery');
+  require('bootstrap/js/modal');
+  let data = [{
+      name: '小张张',
+      number: 21,
+      poll: 21
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 34
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 11
+    },
+    {
+      name: '小黄黄',
+      number: 21,
+      poll: 22
+    },
+    {
+      name: '小李李',
+      number: 21,
+      poll: 11
+    },
+    {
+      name: '小枣枣',
+      number: 21,
+      poll: 12
+    },
+    {
+      name: '小赵赵',
+      number: 21,
+      poll: 19
+    },
+    {
+      name: '小嘻嘻',
+      number: 21,
+      poll: 20
+    },
+    {
+      name: '小星星',
+      number: 21,
+      poll: 13
+    },
+    {
+      name: '小威威',
+      number: 21,
+      poll: 1
+    },
+    {
+      name: '小明明名',
+      number: 21,
+      poll: 6
+    },
+    {
+      name: '小田田',
+      number: 21,
+      poll: 9
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 27
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 23
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 3
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 8
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 12
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 27
+    },
+    {
+      name: '小张',
+      number: 21,
+      poll: 13
+    }
+  ]
+  data.sort(function (a, b) {
+    return b.poll - a.poll
+  })
+  let wrap = $('.vote-counting .count-table');
+  let cartWrap = $('.vote-counting .chart-content');
+  let lineWrap = $('.vote-counting .chart-gridding');
+  let len = data.length;
+  let max = data[0].poll;
+  let lenLine = max / 5 + 1;
+  let maxnum = lenLine*5;
+  for (let j = 0; j < lenLine; j++) {
+    $(`<div class="line" style="left: calc(100%/${ lenLine }*${j});"><span class="num">${5*j}</span></div>`).appendTo(lineWrap);
+  }
+  for (let i = 0; i < len; i++) {
+    $(
+      ` <div class="count-ct">
+        <span class="count-poll">${data[i].poll}票</span>
+        <div class="count-bd">
+          <span class="number">${data[i].number}</span>
+          <span class="name">${data[i].name}</span>
+        </div>
+      </div>`
+    ).appendTo(wrap);
+    $(
+      `  <div class="chart-item clearfix">
+          <div class="label pull-left">
+            <span class="sort">${i}</span>
+            <span class="name">${ data[i].name }</span>
+          </div>
+          <div class="histogram pull-left">
+            <div class="inner" style="width:${data[i].poll/maxnum*100}%;"></div>
+            <div class="poll" style="left:calc(${data[i].poll/maxnum*100}% + 5px);">${ data[i].poll }</div>
+          </div>
+      </div>`
+    ).appendTo(cartWrap);
+  }
+
+</script>
